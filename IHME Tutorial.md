@@ -6,6 +6,18 @@ library(openxlsx)
 library(tidyr)
 ```
 
+```
+library(readxl)   : allow us to import from Excel spreadsheet into R workspace.
+
+library(dplyr)    : allow us to manipulate and transform data frames efficiently.
+                    function includes filter(), select()
+
+library(openxlsx) : allows us to export data frames to Excel
+
+library(tidyr)    : allow us to reshape data
+                    function includes pivot_wider(), pivot_longer()
+```
+
 #### INSERT THE PREVALENCE/INCIDENCE FROM IHME
 ```
 MEASURE  : PREVALENCE / INCIDENCE 

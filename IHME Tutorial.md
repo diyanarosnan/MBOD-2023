@@ -371,6 +371,10 @@ write.csv(female.alzheimer.regression, "2204 8 groups female alzheimer 2013-2019
 > CODE FOR MALE IS SLIGHTLY DIFFERENT SO PLEASE REFER YOUR R SCRIPT
 
 ### ESTIMATE PREVALENCE FOR 2023 USING DISMOD
+```
+IN DISMOD
+SELECT RATE: EVERY 100,000
+```
 
 ### INSERT DATA FROM DISMOD
 #### SELECT OUTPUT IN NUMBER
@@ -425,7 +429,7 @@ prevalence.df <- data.frame(age = age_levels, prevalence = dataa$Prevalence.1[-1
 ## 8   80+      29580
 ```
 
-INSERT YOUR DW
+### INSERT YOUR DW
 ```
 DW <- data.frame("age_name" = c(age_levels) , dw = c((rep(0.137, 6)), 0.161, 0.194))
 ```

@@ -1,3 +1,15 @@
+## IHME SUMMARY
+- [ ] Upload library
+- [ ] Upload 2013-2021 prevalence number from IHME
+- [ ] Upload 2013-2021 population from IHME
+- [ ] Calculate 2013-2021 prevalence rate
+- [ ] Estimate the 2023 prevalence using regression
+- [ ] Enter data into DISMOD-II
+- [ ] Upload the output from DISMOD-II
+- [ ] Upload 2023 mid-year population
+- [ ] Insert DW
+- [ ] Calculate YLD
+
 #### UPLOAD THE NECESSARY LIBRARIES
 ```
 library(readxl)

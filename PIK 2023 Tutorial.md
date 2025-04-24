@@ -6,6 +6,7 @@ This is a walk through tutorial for the data sorting using dataset from PIK.
 - [ ] Filter for your desired disease
 - [ ] Remove missing age, sex and those who died
 - [ ] Summarise the data based on age group & sex
+- [ ] Upload mid-year population 2023
 
 #### LOAD THE NECESSARY LIBRARIES
 ```

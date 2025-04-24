@@ -24,9 +24,9 @@ MEASURE  : PREVALENCE / INCIDENCE
 METRICS  : NUMBER
 CAUSE    : RESPECTIVE DISEASES
 LOCATION : MALAYSIA
-AGE      : < 1 YEAR, 12 - 23 MONTHS, 2-4 YEARS, 5-9 YEARS, 10-14 YEARS, 15-19 YEARS, 20-24 YEARS, 25-29 YEARS, 30-34 YEARS, 
-           35-39 YEARS, 40-44 YEARS, 45-49 YEARS, 50-54 YEARS, 55-59 YEARS, 60-64 YEARS, 65-69 YEARS, 70-74 YEARS, 75-79 YEARS,
-           80-84 YEARS, 85+ YEARS
+AGE      : < 5 YEARS, 5-9 YEARS, 10-14 YEARS, 15-19 YEARS, 20-24 YEARS, 25-29 YEARS, 30-34 YEARS,
+           35-39 YEARS, 40-44 YEARS, 45-49 YEARS, 50-54 YEARS, 55-59 YEARS, 60-64 YEARS, 65-69 YEARS,
+           70-74 YEARS, 75-79 YEARS, 80+ YEARS
 SEX      : FEMALE &  MALE
 YEAR     : 2013 - 2021
 ```
@@ -34,9 +34,9 @@ YEAR     : 2013 - 2021
 ### INSERT POPULATION FROM IHME
 ```
 LOCATION : MALAYSIA
-AGE      : < 1 YEAR, 12 - 23 MONTHS, 2-4 YEARS, 5-9 YEARS, 10-14 YEARS, 15-19 YEARS, 20-24 YEARS, 25-29 YEARS, 30-34 YEARS, 
-           35-39 YEARS, 40-44 YEARS, 45-49 YEARS, 50-54 YEARS, 55-59 YEARS, 60-64 YEARS, 65-69 YEARS, 70-74 YEARS, 
-           75-79 YEARS, 80-84 YEARS, 80+ YEARS
+AGE      : < 5 YEARS, 5-9 YEARS, 10-14 YEARS, 15-19 YEARS, 20-24 YEARS, 25-29 YEARS, 30-34 YEARS,
+           35-39 YEARS, 40-44 YEARS, 45-49 YEARS, 50-54 YEARS, 55-59 YEARS, 60-64 YEARS, 65-69 YEARS,
+           70-74 YEARS, 75-79 YEARS, 80+ YEARS
 SEX      : FEMALE &  MALE
 YEAR     : 2013 - 2021
 ```
@@ -57,8 +57,8 @@ number.female <- read.csv("\DIRECTORY REDACTED\", header = TRUE) %>%
   filter(sex_name == "Female", year %in% years) %>% 
   select(age_name, year, val) %>%
   pivot_wider(names_from = year, values_from = val) %>%
-  add_row(age_name = c("<5 years", "5-14 years", "15-29 years", "30-44 years",
-                       "45-59 years", "60-69 years", "70-79 years", "80+ years"))
+  add_row(age_name = c("5-14 years", "15-29 years", "30-44 years",
+                       "45-59 years", "60-69 years", "70-79 years"))
 ```
 ```
 > number.female
@@ -74,12 +74,6 @@ number.female <- read.csv("\DIRECTORY REDACTED\", header = TRUE) %>%
 ### ADD UP THE YEARS TO FORM 8 GROUPS
 ```
 for (year in years){
-  count1 <- number.female[number.female$age_name == "<1 year", year]
-  count2 <- number.female[number.female$age_name == "2-4 years", year]
-  count3 <- number.female[number.female$age_name == "13-23 months", year]
-  result <- sum(unlist(c(count1, count2, count3)))
-  number.female[number.female$age_name == "<5 years", year] <- result
-  
   count1 <- number.female[number.female$age_name == "5-9 years", year]
   count2 <- number.female[number.female$age_name == "10-14 years", year]
   result <- count1+count2
@@ -112,11 +106,6 @@ for (year in years){
   count2 <- number.female[number.female$age_name == "75-79 years", year]
   result <- count1+count2
   number.female[number.female$age_name == "70-79 years", year] <- result
-
-  count1 <- number.female[number.female$age_name == "80-84 years", year]
-  count2 <- number.female[number.female$age_name == "85+ years", year]
-  result <- count1+count2
-  number.female[number.female$age_name == "80+ years", year] <- result
   }
 ```
 ```
@@ -158,18 +147,12 @@ population.female <- read.csv("/DIRECTORY REDACTED/", header = TRUE)%>%
   filter(sex_name == "Female", year %in% years) %>%
   select(age_name, year, val) %>%
   pivot_wider(names_from = year, values_from = val)  %>% 
-  add_row(age_name = c("<5 years", "5-14 years", "15-29 years", "30-44 years", "45-59 years", "60-69 years", "70-79 years"))
+  add_row(age_name = c("5-14 years", "15-29 years", "30-44 years", "45-59 years", "60-69 years", "70-79 years"))
 ```
 
 ### ADD UP THE YEARS TO FORM 8 GROUPS
 ```
 for (year in years){
-  count1 <- population.female[population.female$age_name == "<1 year", year]
-  count2 <- population.female[population.female$age_name == "2-4 years", year]
-  count3 <- population.female[population.female$age_name == "13-23 months", year]
-  result <- sum(unlist(c(count1, count2, count3)))
-  population.female[population.female$age_name == "<5 years", year] <- result
-  
   count1 <- population.female[population.female$age_name == "5-9 years", year]
   count2 <- population.female[population.female$age_name == "10-14 years", year]
   result <- count1+count2
@@ -214,36 +197,36 @@ population.female <- population.female[match(custom_order, population.female$age
 ### MEASURE THE PREVALENCE RATE FROM 2013 - 2019
 ```
 rate.female <- data.frame(age_name = custom_order, "2013" = NA, "2014" = NA, "2015" = NA,
-                          "2016" = NA, "2017" = NA, "2018" = NA, "2019" = NA)
+                          "2016" = NA, "2017" = NA, "2018" = NA, "2019" = NA, "2020" = NA, "2021" = NA)
 ```
 
 ```
 > rate.female
-##      age_name X2013 X2014 X2015 X2016 X2017 X2018 X2019
-## 1    <5 years    NA    NA    NA    NA    NA    NA    NA
-## 2  5-14 years    NA    NA    NA    NA    NA    NA    NA
-## 3 15-29 years    NA    NA    NA    NA    NA    NA    NA
-## 4 30-44 years    NA    NA    NA    NA    NA    NA    NA
-## 5 45-59 years    NA    NA    NA    NA    NA    NA    NA
-## 6 60-69 years    NA    NA    NA    NA    NA    NA    NA
-## 7 70-79 years    NA    NA    NA    NA    NA    NA    NA
-## 8   80+ years    NA    NA    NA    NA    NA    NA    NA
+##      age_name X2013 X2014 X2015 X2016 X2017 X2018 X2019 X2020 X2021
+## 1    <5 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 2  5-14 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 3 15-29 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 4 30-44 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 5 45-59 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 6 60-69 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 7 70-79 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## 8   80+ years    NA    NA    NA    NA    NA    NA    NA    NA    NA
 ```
 ```
 ## Establish the correct column name for rate.female
-colnames(rate.female) <- c("age_name", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+colnames(rate.female) <- c("age_name", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 ```
 ```
 > rate.female
-##      age_name 2013 2014 2015 2016 2017 2018 2019
-## 1    <5 years   NA   NA   NA   NA   NA   NA   NA
-## 2  5-14 years   NA   NA   NA   NA   NA   NA   NA
-## 3 15-29 years   NA   NA   NA   NA   NA   NA   NA
-## 4 30-44 years   NA   NA   NA   NA   NA   NA   NA
-## 5 45-59 years   NA   NA   NA   NA   NA   NA   NA
-## 6 60-69 years   NA   NA   NA   NA   NA   NA   NA
-## 7 70-79 years   NA   NA   NA   NA   NA   NA   NA
-## 8   80+ years   NA   NA   NA   NA   NA   NA   NA
+##      age_name 2013 2014 2015 2016 2017 2018 2019 2020 2021
+## 1    <5 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
+## 2  5-14 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
+## 3 15-29 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
+## 4 30-44 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
+## 5 45-59 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
+## 6 60-69 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
+## 7 70-79 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
+## 8   80+ years   NA   NA   NA   NA   NA   NA   NA   NA   NA
 ```
 ### ESTABLISH THE AGE GROUPS
 ```
@@ -316,7 +299,7 @@ female.new.df <- data.frame(age_name = age_groups)
 ```
 
 ```
-years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019")
+years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 
 for (a in age_groups){
   for (i in years){
@@ -359,24 +342,28 @@ colnames(female.new.df) <- c("age", "constant", "coefficient", "2023")
 ```
 
 ```
-female.alzheimer.regression <- cbind(rate.female[, 1:8], "", female.new.df[-1])
+female.alzheimer.regression <- cbind(rate.female[, 1:10], "", female.new.df[-1])
 ```
 ```
 > female.alzheimer.regression
-##      age_name         2013         2014         2015         2016         2017         2018         2019 ""    constant  coefficient           2023
-## 1    <5 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000         0.0000   0.00000000       0.000000
-## 2  5-14 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000         0.0000   0.00000000       0.000000
-## 3 15-29 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000         0.0000   0.00000000       0.000000
-## 4 30-44 years     6.121613     6.065475     5.999001     5.918077     5.838169     5.776106     5.742918       140.9702  -0.06698766       5.454138
-## 5 45-59 years   391.019288   393.670466   396.302353   398.566020   400.088187   400.739847   400.771706     -2999.7850   1.68506611     409.103729
-## 6 60-69 years  1903.038738  1907.481102  1911.909267  1909.778052  1914.232428  1914.387301  1911.314377     -1038.9924   1.46294557    1920.546514
-## 7 70-79 years  6061.590508  6056.639709  6005.719329  5876.874161  5819.750284  5782.305049  5770.588460    121660.9000 -57.41587532    5508.584230
-## 8   80+ years 17353.994304 17334.634083 17371.763505 17274.299496 17277.983849 17313.979393 17387.286447     19865.8708  -1.25759314   17321.759859
+##      age_name         2013         2014         2015         2016         2017         2018         2019         2020         2021 ""    constant   coefficient         2023
+## 1    <5 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000         0.0000   0.00000000     0.000000
+## 2  5-14 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000         0.0000   0.00000000     0.000000
+## 3 15-29 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000         0.0000   0.00000000     0.000000
+## 4 30-44 years     6.121613     6.065475     5.999001     5.918077     5.838169     5.776106     5.742918     5.637876     5.780343       116.8782  -0.05503355     5.545307
+## 5 45-59 years   391.019288   393.670466   396.302353   398.566020   400.088187   400.739847   400.771706   397.677669   391.540352      -451.0501   0.42030668   399.230272
+## 6 60-69 years  1903.038738  1907.481102  1911.909267  1909.778052  1914.232428  1914.387301  1911.314377  1908.616471  1799.437631     15599.2419  -6.79298089  1857.041600
+## 7 70-79 years  6061.590508  6056.639709  6005.719329  5876.874161  5819.750284  5782.305049  5770.588460  5796.074214  5605.579556    112447.9356 -52.84285236  5546.845249
+## 8   80+ years 17353.994304 17334.634083 17371.763505 17274.299496 17277.983849 17313.979393 17387.286447 17447.947080 17276.171843     13996.9085   1.65624876 17347.499715
 ```
 
+#### YOU CAN CHANGE THE FILE NAME TO ANYTHING
 ```
-write.csv(female.alzheimer.regression, "2204 8 groups female alzheimer 2013-2019 regression.csv")
+write.csv(female.alzheimer.regression, "8 groups female alzheimer 2013-2021 regression.csv")
 ```
+>[!WARNING]
+> Make sure to put ".csv" when you want to create a csv file.
+
 > [!NOTE]
 > SIMILARLY, RUN THE SAME THING FOR MALE
 > 
@@ -394,6 +381,8 @@ SELECT RATE: EVERY 100,000
 dataa <- read.csv(file = "C:/Users/DELL/Downloads/DISMOD_ALZHEIMER_8.csv", 
                   skip = 50, nrows = 9, header = TRUE)
 ```
+>[!WARNING]
+> ADJUST THE SKIP ACCORDING TO HOW MANY ROWS YOU WANT TO SKIP IN YOUR RESPECTIVE FILE 
 ```
 > dataa
 ##     Age Prevalence Remission  Mortality  Incidence Prevalence.1 Remission.1 Case.fatality Duration Mortality.1 RR.mortality Age.of.onset  X
@@ -495,5 +484,5 @@ for(umur in age_levels){
 ## 8      80+     165000      29580 0.194 5738.520
 ```
 ```
-write.csv(YLD, "2204 YLD_8_female.CSV")
+write.csv(YLD, "YLD_8_female.CSV")
 ```

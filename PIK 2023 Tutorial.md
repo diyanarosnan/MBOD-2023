@@ -3,10 +3,10 @@ This is a walk through tutorial for the data sorting using dataset from PIK.
 
 - [ ] [Load library](#load-the-necessary-libraries)
 - [ ] [Calculate age for rows with missing values](#calculate-age-for-rows-with--1-values-in-the-patient_age_single-column)
-- [ ] Filter for your desired disease
-- [ ] Remove missing age, sex and those who died
-- [ ] Summarise the data based on age group & sex
-- [ ] Upload mid-year population 2023
+- [ ] [Filter for desired disease](#filter-for-desired-disease-code-in-this-tutorial-i-want-to-observe-copd)
+- [ ] [Remove missing age, sex and those who died](#remove-data-with-missing-gender-missing-age-and-those-who-died)
+- [ ] [Summarise the data based on age group & sex](#generate-a-summary-table)
+- [ ] [Upload mid-year population 2023](#upload-mid-year-population-2023)
 
 ### LOAD THE NECESSARY LIBRARIES
 ```r

@@ -2,7 +2,7 @@
 This is a walk through tutorial for the data sorting using dataset from PIK.
 
 - [ ] [Load library](#load-the-necessary-libraries)
-- [ ] Calculate age for rows with missing values
+- [ ] [Calculate age for rows with missing values](#CALCULATE-AGE-FOR-ROWS-WITH--1-VALUES-IN-THE-`patient_age_single`-COLUMN)
 - [ ] Filter for your desired disease
 - [ ] Remove missing age, sex and those who died
 - [ ] Summarise the data based on age group & sex

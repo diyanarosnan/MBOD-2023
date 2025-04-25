@@ -11,24 +11,22 @@
 - [ ] Calculate YLD
 
 #### UPLOAD THE NECESSARY LIBRARIES
-```
+```r
 library(readxl)
 library(dplyr)
 library(openxlsx)
 library(tidyr)
 ```
 
-```
-library(readxl)   : allow us to import from Excel spreadsheet into R workspace.
+`library(readxl)`   : allow us to import from Excel spreadsheet into R workspace.
 
-library(dplyr)    : allow us to manipulate and transform data frames efficiently.
+`library(dplyr)`    : allow us to manipulate and transform data frames efficiently.
                     function includes filter(), select()
 
-library(openxlsx) : allows us to export data frames to Excel
+`library(openxlsx)` : allows us to export data frames to Excel
 
-library(tidyr)    : allow us to reshape data
+`library(tidyr)`    : allow us to reshape data
                     function includes pivot_wider(), pivot_longer()
-```
 
 #### INSERT THE PREVALENCE/INCIDENCE FROM IHME
 ```
@@ -57,22 +55,22 @@ YEAR     : 2013 - 2021
 > We will generate the data for female first.
 
 ### ESTABLISH THE YEAR YOU WANT TO INCLUDE
-```
-## Remove the year you don't want to include
+```r
 years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 ```
-
+> [!WARNING]
+> Remove the years you dont want to include.
 ### INSERT THE NUMBER FROM IHME
-```
+```r
 ## Change the directory to your own directory
-number.female <- read.csv("\DIRECTORY REDACTED\", header = TRUE) %>%
+number.female <- read.csv("/path/to/file.xlsx", header = TRUE) %>%
   filter(sex_name == "Female", year %in% years) %>% 
   select(age_name, year, val) %>%
   pivot_wider(names_from = year, values_from = val) %>%
   add_row(age_name = c("5-14 years", "15-29 years", "30-44 years",
                        "45-59 years", "60-69 years", "70-79 years"))
 ```
-```
+```r
 > number.female
 ## A tibble: 28 × 10
 ##   age_name    `2013` `2014` `2015` `2016` `2017` `2018` `2019` `2020` `2021`
@@ -84,7 +82,7 @@ number.female <- read.csv("\DIRECTORY REDACTED\", header = TRUE) %>%
 ```
 
 ### ADD UP THE YEARS TO FORM 8 GROUPS
-```
+```r
 for (year in years){
   count1 <- number.female[number.female$age_name == "5-9 years", year]
   count2 <- number.female[number.female$age_name == "10-14 years", year]
@@ -120,7 +118,7 @@ for (year in years){
   number.female[number.female$age_name == "70-79 years", year] <- result
   }
 ```
-```
+```r
 > number.female
 ## A tibble: 28 × 10
 ##   age_name     `2013` `2014` `2015` `2016` `2017` `2018` `2019` `2020` `2021`
@@ -133,12 +131,12 @@ for (year in years){
 ```
 
 ### MATCH AND CUSTOM ORDER OF THE YEAR
-```
+```r
 custom_order <- c("<5 years", "5-14 years", "15-29 years", "30-44 years", "45-59 years", "60-69 years",  
                   "70-79 years", "80+ years")
 number.female <- number.female[match(custom_order, number.female$age_name), ]
 ```
-```
+```r
 > number.female
 ## A tibble: 8 × 10
 ##  age_name    `2013` `2014` `2015` `2016` `2017` `2018` `2019` `2020` `2021`
@@ -154,7 +152,7 @@ number.female <- number.female[match(custom_order, number.female$age_name), ]
 ```
 
 ### UPLOAD POPULATION DATA
-```
+```r
 population.female <- read.csv("/DIRECTORY REDACTED/", header = TRUE)%>% 
   filter(sex_name == "Female", year %in% years) %>%
   select(age_name, year, val) %>%
@@ -163,7 +161,7 @@ population.female <- read.csv("/DIRECTORY REDACTED/", header = TRUE)%>%
 ```
 
 ### ADD UP THE YEARS TO FORM 8 GROUPS
-```
+```r
 for (year in years){
   count1 <- population.female[population.female$age_name == "5-9 years", year]
   count2 <- population.female[population.female$age_name == "10-14 years", year]
@@ -200,19 +198,19 @@ for (year in years){
 }
 ```
 ### CUSTOM ORDER THE YEAR
-```
+```r
 custom_order <- c("<5 years", "5-14 years", "15-29 years", "30-44 years", "45-59 years", "60-69 years",  
                   "70-79 years", "80+ years")
 population.female <- population.female[match(custom_order, population.female$age_name), ]
 ```
 
 ### MEASURE THE PREVALENCE RATE FROM 2013 - 2019
-```
+```r
 rate.female <- data.frame(age_name = custom_order, "2013" = NA, "2014" = NA, "2015" = NA,
                           "2016" = NA, "2017" = NA, "2018" = NA, "2019" = NA, "2020" = NA, "2021" = NA)
 ```
 
-```
+```r
 > rate.female
 ##      age_name X2013 X2014 X2015 X2016 X2017 X2018 X2019 X2020 X2021
 ## 1    <5 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
@@ -224,11 +222,11 @@ rate.female <- data.frame(age_name = custom_order, "2013" = NA, "2014" = NA, "20
 ## 7 70-79 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
 ## 8   80+ years    NA    NA    NA    NA    NA    NA    NA    NA    NA
 ```
-```
+```r
 ## Establish the correct column name for rate.female
 colnames(rate.female) <- c("age_name", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 ```
-```
+```r
 > rate.female
 ##      age_name 2013 2014 2015 2016 2017 2018 2019 2020 2021
 ## 1    <5 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
@@ -241,16 +239,16 @@ colnames(rate.female) <- c("age_name", "2013", "2014", "2015", "2016", "2017", "
 ## 8   80+ years   NA   NA   NA   NA   NA   NA   NA   NA   NA
 ```
 ### ESTABLISH THE AGE GROUPS
-```
+```r
 age_groups <- c(number.female$age_name)
 ```
-```
+```r
 > age_groups
 [1] "<5 years"    "5-14 years"  "15-29 years" "30-44 years" "45-59 years" "60-69 years" "70-79 years"
 [8] "80+ years" 
 ```
 ### CALCULATE THE PREVALENCE RATE FOR FEMALE
-```
+```r
 for (age_group in age_groups){
   for(year in years){
     count1 <- number.female[number.female$age_name == age_group, year]
@@ -260,7 +258,7 @@ for (age_group in age_groups){
   }
 }
 ```
-```
+```r
 > rate.female
 ##      age_name         2013         2014         2015         2016         2017         2018           2019         2020         2021
 ## 1    <5 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000       0.000000     0.000000     0.000000
@@ -273,10 +271,10 @@ for (age_group in age_groups){
 ## 8   80+ years 17353.994304 17334.634083 17371.763505 17274.299496 17277.983849 17313.979393    17387.286447 17447.947080 17276.171843
 ```
 ### GENERATE REGRESSION FOR 2023 ESTIMATION
-```
+```r
 x <- pivot_longer(rate.female, cols = 2:10)
 ```
-```
+```r
 > x
 ## A tibble: 72 × 3
 ##    age_name   name  value
@@ -292,12 +290,12 @@ x <- pivot_longer(rate.female, cols = 2:10)
 ##  9 <5 years   2021      0
 ## 10 5-14 years 2013      0
 ```
-```
+```r
 new_data <- data.frame(year = 2023)
 
 female.new.df <- data.frame(age_name = age_groups)
 ```
-```
+```r
 > female.new.df
 ##      age_name
 ## 1    <5 years
@@ -310,12 +308,11 @@ female.new.df <- data.frame(age_name = age_groups)
 ## 8   80+ years
 ```
 
-```
+```r
 years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 
 for (a in age_groups){
   for (i in years){
-    #result <- data.alzheimer[data.alzheimer$age == a, i]
     temp <- x %>% filter(age_name == a) %>% select(name, value) %>% filter(name %in% years)
     colnames(temp) <- c("year", "val")
     model <- lm(val ~ (as.integer(year)), data = temp)
@@ -325,7 +322,7 @@ for (a in age_groups){
   }
 }
 ```
-```
+```r
 > female.new.df
 ##      age_name          V2           V3         2023
 ## 1    <5 years      0.0000   0.00000000     0.000000
@@ -337,10 +334,10 @@ for (a in age_groups){
 ## 7 70-79 years 121660.9000 -57.41587532  5508.584230
 ## 8   80+ years  19865.8708  -1.25759314 17321.759859
 ```
-```
+```r
 colnames(female.new.df) <- c("age", "constant", "coefficient", "2023")
 ```
-```
+```r
 > female.new.df
 ##           age    constant  coefficient         2023
 ## 1    <5 years      0.0000   0.00000000     0.000000
@@ -353,10 +350,10 @@ colnames(female.new.df) <- c("age", "constant", "coefficient", "2023")
 ## 8   80+ years  19865.8708  -1.25759314 17321.759859
 ```
 
-```
+```r
 female.alzheimer.regression <- cbind(rate.female[, 1:10], "", female.new.df[-1])
 ```
-```
+```r
 > female.alzheimer.regression
 ##      age_name         2013         2014         2015         2016         2017         2018         2019         2020         2021 ""    constant   coefficient         2023
 ## 1    <5 years     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000         0.0000   0.00000000     0.000000
@@ -370,7 +367,7 @@ female.alzheimer.regression <- cbind(rate.female[, 1:10], "", female.new.df[-1])
 ```
 
 #### YOU CAN CHANGE THE FILE NAME TO ANYTHING
-```
+```r
 write.csv(female.alzheimer.regression, "8 groups female alzheimer 2013-2021 regression.csv")
 ```
 >[!WARNING]
@@ -384,18 +381,19 @@ write.csv(female.alzheimer.regression, "8 groups female alzheimer 2013-2021 regr
 ### ESTIMATE PREVALENCE FOR 2023 USING DISMOD
 ```
 IN DISMOD
-SELECT RATE: EVERY 100,000
+SELECT PREVALENCE/INCIDENCE RATE: EVERY 100,000
 ```
 
 ### INSERT DATA FROM DISMOD
 #### SELECT OUTPUT IN NUMBER
-```
-dataa <- read.csv(file = "C:/Users/DELL/Downloads/DISMOD_ALZHEIMER_8.csv", 
-                  skip = 50, nrows = 9, header = TRUE)
+```r
+dataa <- read.csv(file = "\DIRECTORY REDACTED\", 
+                  skip = 50, nrows = 9,
+                  header = TRUE)
 ```
 >[!WARNING]
-> ADJUST THE SKIP ACCORDING TO HOW MANY ROWS YOU WANT TO SKIP IN YOUR RESPECTIVE FILE 
-```
+> Adjust the skip according to the total rows you want to skip in your respective file. 
+```r
 > dataa
 ##     Age Prevalence Remission  Mortality  Incidence Prevalence.1 Remission.1 Case.fatality Duration Mortality.1 RR.mortality Age.of.onset  X
 ## 1        (numbers)   (rates)  (numbers)  (numbers)    (numbers)   (numbers)     (numbers)  (years)   (numbers)     (number)      (years) NA
@@ -409,10 +407,10 @@ dataa <- read.csv(file = "C:/Users/DELL/Downloads/DISMOD_ALZHEIMER_8.csv",
 ## 9   80+      31110    0.0000         54        679        29580           0            50  12.4519          50       1.0233      83.1062 NA
 ```
 ### INSERT POPULATION FOR 2023
-```
+```r
 population_2023 <- read.xlsx("C:/Users/DELL/Downloads/POPULATION 2023 8.xlsx")
 ```
-```
+```r
 > population_2023
 ##   age_name    MALE  FEMALE
 ## 1       <5 1215700 1150800
@@ -425,11 +423,11 @@ population_2023 <- read.xlsx("C:/Users/DELL/Downloads/POPULATION 2023 8.xlsx")
 ## 8      80+  165000  179600
 ```
 ### GENERATE A DATAFRAME FOR PREVALENCE
-```
+```r
 age_levels <- dataa$Age[-1]
 prevalence.df <- data.frame(age = age_levels, prevalence = dataa$Prevalence.1[-1])
 ```
-```
+```r
 > prevalence.df
 ##     age prevalence
 ## 1   0-4          0
@@ -443,7 +441,7 @@ prevalence.df <- data.frame(age = age_levels, prevalence = dataa$Prevalence.1[-1
 ```
 
 ### INSERT YOUR DW
-```
+```r
 DW <- data.frame("age_name" = c(age_levels) , dw = c((rep(0.137, 6)), 0.161, 0.194))
 ```
 ```
@@ -460,10 +458,10 @@ DW <- data.frame("age_name" = c(age_levels) , dw = c((rep(0.137, 6)), 0.161, 0.1
 ```
 
 ### GENERATE YLD DATAFRAME
-```
+```r
 YLD <- data.frame("age_name" = age_levels, population = c(population_2023$FEMALE), prevalence = prevalence.df[-1], dw = c((rep(0.137, 6)), 0.161, 0.194), YLD = NA)
 ```
-```
+```r
 > YLD
 ##   age_name population prevalence    dw YLD
 ## 1      0-4    1215700          0 0.137  NA
@@ -475,7 +473,7 @@ YLD <- data.frame("age_name" = age_levels, population = c(population_2023$FEMALE
 ## 7    70-79     538600      29834 0.161  NA
 ## 8      80+     165000      29580 0.194  NA
 ```
-```
+```r
 for(umur in age_levels){
   count1 <- as.numeric(prevalence.df[prevalence.df$age == umur, 2])
   count2 <- as.numeric(DW[DW$age_name == umur, 2])
@@ -483,7 +481,7 @@ for(umur in age_levels){
   YLD[YLD$age_name == umur, 5] <- result
 }
 ```
-```
+```r
 > YLD
 ##   age_name population prevalence    dw      YLD
 ## 1      0-4    1215700          0 0.137    0.000
@@ -495,6 +493,6 @@ for(umur in age_levels){
 ## 7    70-79     538600      29834 0.161 4803.274
 ## 8      80+     165000      29580 0.194 5738.520
 ```
-```
+```r
 write.csv(YLD, "YLD_8_female.CSV")
 ```

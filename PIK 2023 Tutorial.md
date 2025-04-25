@@ -2,19 +2,19 @@
 This is a walk through tutorial for the data sorting using dataset from PIK.
 
 - [ ] [Load library](#load-the-necessary-libraries)
-- [ ] Calculate the age for rows with missing age
+- [ ] Calculate age for rows with missing values
 - [ ] Filter for your desired disease
 - [ ] Remove missing age, sex and those who died
 - [ ] Summarise the data based on age group & sex
 - [ ] Upload mid-year population 2023
 
-#### LOAD THE NECESSARY LIBRARIES
+### LOAD THE NECESSARY LIBRARIES
 ```r
 library(dplyr)
 library(tidyr)
 ```
 
-#### LOAD THE R DATA FILE FROM PIK
+### LOAD THE R DATA FILE FROM PIK
 ```r
 load("/directory/path/to/file.xlsx")
 ```
@@ -23,16 +23,18 @@ load("/directory/path/to/file.xlsx")
 >
 > If your file is in CSV format, remember to change file extension from `.xlsx` to `.csv`
 
-#### IDENTIFY THE ROWNAMES IN THE PIK DATASET WHERE ```patient_age_single``` IS EQUAL TO -1 (UNKNOWN).
+### CALCULATE AGE FOR ROWS WITH -1 VALUES IN THE `patient_age_single` COLUMN
+Identify the rownames in the `Inp2023_burden` where `patient_age_single` is equal to -1.
 ```r
 target_indices <- which(Inp2023_burden$patient_age_single == "-1")
 ```
 
-#### CREATE A SEPARATE DATAFRAME. EXTRACT THE WHOLE ROW FROM THE PIK DATASET WHERE THE ```patient_age_single``` IS EQUAL TO -1
+Create a separate dataframe (`df`). Extract the rows with unknown age from `Inp2023_burden`.
 ```r
 df <- Inp2023_burden[target_indices, ]
 ```
 
+Generate a new column (`dob_clean`) and insert the date of birth.
 ```r
 df$dob_clean <- as.Date(sub(" .*", "", df$dob), format = "%Y/%m/%d")
 ```
@@ -49,16 +51,18 @@ as.date ()          : convert character/string to date
 format              : tells R how the date is structured
 %Y/%m/%d            : year/month/date
 ```
-#### EXTRACT THE YEAR FROM COLUMN ```dob_clean``` AND PLACE IT A NEW COLUMN CALLED ```year```
+
+Extract the year from column `dob_clean` and place it in a new column (`year`).
 ```r
 df$year <- as.numeric(format(df$dob_clean, "%Y"))
 ```
-#### CALCULATE THE AGE AND UPDATE THE VALUES IN THE ```patient_age_single``` COLUMN
+
+Calculate the age and upate the values in the `patient_age_single` column.
 ```r
 df$patient_age_single <- 2023 - df$year
 ```
 
-#### EXTRACT AGE > 0 AND SUBSTITUTE THE AGE (-1) FROM THE ORIGINAL DATAFRAME TO THE NEWLY CALCULATED AGE.
+Extract age > 0 and substitute the -1 to the newly calculated age.
 ```r
 df_clean <- df[df$patient_age_single >= 0 & !is.na(df$patient_age_single), ]
 target_indices <- as.numeric(rownames(df_clean))

@@ -1,7 +1,7 @@
 ## PUSAT INFORMASI KESIHATAN 2023
 This is a walk through tutorial for the data sorting using dataset from PIK.
 
-- [ ] Load library
+- [ ] [Load library](#load-the-necessary-libraries)
 - [ ] Calculate the age for rows with missing age
 - [ ] Filter for your desired disease
 - [ ] Remove missing age, sex and those who died
@@ -9,26 +9,31 @@ This is a walk through tutorial for the data sorting using dataset from PIK.
 - [ ] Upload mid-year population 2023
 
 #### LOAD THE NECESSARY LIBRARIES
-```
+```r
 library(dplyr)
 library(tidyr)
 ```
 
 #### LOAD THE R DATA FILE FROM PIK
+```r
+load("/directory/path/to/file.xlsx")
 ```
-load("//DIRECTORY REDACTED//")
-```
+>[!NOTE]
+>There is more than one way to load your file!
+>
+> If your file is in CSV format, remember to change file extension from `.xlsx` to `.csv`
+
 #### IDENTIFY THE ROWNAMES IN THE PIK DATASET WHERE ```patient_age_single``` IS EQUAL TO -1 (UNKNOWN).
-```
+```r
 target_indices <- which(Inp2023_burden$patient_age_single == "-1")
 ```
 
 #### CREATE A SEPARATE DATAFRAME. EXTRACT THE WHOLE ROW FROM THE PIK DATASET WHERE THE ```patient_age_single``` IS EQUAL TO -1
-```
+```r
 df <- Inp2023_burden[target_indices, ]
 ```
 
-```
+```r
 df$dob_clean <- as.Date(sub(" .*", "", df$dob), format = "%Y/%m/%d")
 ```
 ```
@@ -44,68 +49,66 @@ as.date ()          : convert character/string to date
 format              : tells R how the date is structured
 %Y/%m/%d            : year/month/date
 ```
-
 #### EXTRACT THE YEAR FROM COLUMN ```dob_clean``` AND PLACE IT A NEW COLUMN CALLED ```year```
-```
+```r
 df$year <- as.numeric(format(df$dob_clean, "%Y"))
 ```
 #### CALCULATE THE AGE AND UPDATE THE VALUES IN THE ```patient_age_single``` COLUMN
-```
+```r
 df$patient_age_single <- 2023 - df$year
 ```
 
 #### EXTRACT AGE > 0 AND SUBSTITUTE THE AGE (-1) FROM THE ORIGINAL DATAFRAME TO THE NEWLY CALCULATED AGE.
-```
+```r
 df_clean <- df[df$patient_age_single >= 0 & !is.na(df$patient_age_single), ]
 target_indices <- as.numeric(rownames(df_clean))
 Inp2023_burden_clean <- Inp2023_burden
 Inp2023_burden_clean$patient_age_single[target_indices] <- df_clean$patient_age_single
 ```
-#### GENERATE A CSV
-```
+#### GENERATE A CSV FILE
+This command will save your data `Inp2023_burden_clean` as a CSV file named `"PIK 2023.csv"` in your current working directory.
+```r
 write.csv(Inp2023_burden_clean, "PIK 2023.csv")
 ```
-#### IN THE DATAFRAME, THE ```patient_gender``` COLUMN HAVE FIVE RESULTS
-```
+
+#### THE `patient_gender` COLUMN HAS FIVE UNIQUE VALUES
+```r
 unique(Inp2023_burden_clean$patient_gender)
 > unique(Inp2023_burden_clean$patient_gender)
 "LELAKI"  "PEREMPUAN"  "Tiada Maklumat"  "NOT AVAILABLE"  "RAGU"
 ```
 
-#### FILTER FOR YOUR DESIRE DISEASE CODE (IN THIS TUTORIAL, I WANT TO OBSERVE COPD)
-```
+#### FILTER FOR DESIRED DISEASE CODE (IN THIS TUTORIAL, I WANT TO OBSERVE COPD)
+```r
 disease_data <- Inp2023_burden_clean %>% 
   filter(icd10_3d_code %in% c("J41", "J42", "J43", "J44"))
 ```
+#### CHANGE THE DISEASE CODE USING THE ```filter()``` FUNCTION.
+```r
+DIARRHOEAL DISEASE: A00, A02-A04, A06-A09
+disease_data <- Inp2023_burden_clean %>% 
+  filter(icd10_3d_code %in% c("A00", "A02", "A03", "A04", "A06", "A07", "A08", "A09")) 
+```
+```r
+FILTER FOR: RHEUMATIC HEART DISEASE: I01-I09
+disease_data <- Inp2023_burden_clean %>% 
+  filter(icd10_3d_code %in% c("I01", "I02", "I03", "I04", "I05", "I06", "I07", "I08", "I09"))
+```
 
 #### FILTER OUT MISSING DATA (FOR YOUR REFERENCE)
-```
+```r
 missing_summary <- disease_data %>%
   filter(patient_gender %in% c("RAGU", "NOT AVAILABLE", "Tiada Maklumat") |  patient_age_single == "-1")
 ```
 
 #### REMOVE DATA WITH MISSING GENDER, MISSING AGE AND THOSE WHO DIED.
-```
+```r
 disease_data <- disease_data %>%
   filter(patient_gender %in% c("PEREMPUAN", "LELAKI")) %>%
   filter(patient_age_single >= 0, !disch_type_desc == "MATI")
 
 ```
-#### CHANGE THE DISEASE CODE (AT THE SECOND ROW OF THE CODE ABOVE) USING THE ```filter()``` FUNCTION.
-```
-DIARRHOEAL DISEASE: A00, A02-A04, A06-A09
-disease_data <- Inp2023_burden_clean %>% 
-  filter(icd10_3d_code %in% c("A00", "A02", "A03", "A04", "A06", "A07", "A08", "A09")) %>% 
-  filter(patient_gender %in% c("PEREMPUAN", "LELAKI")) %>%
-  filter(patient_age_single >= 0, !disch_type_desc == "MATI")
-```
-```
-FILTER FOR: RHEUMATIC HEART DISEASE: I01-I09
-disease_data <- Inp2023_burden_clean %>% 
-  filter(icd10_3d_code %in% c("I01", "I02", "I03", "I04", "I05", "I06", "I07", "I08", "I09")) %>% 
-  filter(patient_gender %in% c("PEREMPUAN", "LELAKI")) %>%
-  filter(patient_age_single >= 0, !disch_type_desc == "MATI")
-```
+
 
 >[!IMPORTANT]
 > Make sure to put **double quotation mark("")** and **comma (,)** between your code.
@@ -115,7 +118,7 @@ disease_data <- Inp2023_burden_clean %>%
 > You have to write down one by one, **"I01"** , **"I02"** , **"I03"**
 
 #### GENERATE A SUMMARY TABLE
-```
+```r
 copd_summary <- disease_data %>%
   filter(patient_gender %in% c("PEREMPUAN", "LELAKI")) %>%
   mutate(age_group = case_when(
@@ -130,7 +133,7 @@ copd_summary <- disease_data %>%
   group_by(age_group, patient_gender) %>%
   summarise(count = n(), .groups = 'drop')
 ```
-```
+```r
 > copd_summary
 ## A tibble: 16 × 3
 ##   age_group patient_gender count
@@ -153,13 +156,13 @@ copd_summary <- disease_data %>%
 ## 16 80+       PEREMPUAN       1118
 ```
 #### CHANGE THE STRUCTURE OF THE TABLE TO BECOME WIDER
-```
+```r
 copd_summary <- copd_summary %>%
   pivot_wider(names_from = patient_gender, values_from = count, values_fill = 0) %>%
   arrange(age_group)
 ```
 
-```
+```r
 > copd_summary
 ##  A tibble: 8 × 3
 ##  age_group LELAKI PEREMPUAN
@@ -175,8 +178,8 @@ copd_summary <- copd_summary %>%
 ```
 
 #### UPLOAD MID-YEAR POPULATION 2023
-```
-population_2023 <- read.xlsx("/DIRECTORY REDACTED/")
+```r
+population_2023 <- read.xlsx("/directory/to/file.xlsx")
 ```
 
 ############# DATA / MID-YEAR POPULATION 2023 = PREVALENCE 2023

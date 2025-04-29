@@ -1,3 +1,10 @@
+## E-NOTIFIKASI SUMMARY
+- [ ] Upload library
+- [ ] Upload each dataset for respective diseases
+- [ ] Data cleaning
+- [ ] Generate summary table
+- [ ] Calculate YLD
+
 Filter out data with no age, and MATI 
 
 #### UPLOAD DATA

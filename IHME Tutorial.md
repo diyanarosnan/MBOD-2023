@@ -1,15 +1,14 @@
 ## IHME SUMMARY
 - [ ] [Upload library](#upload-the-necessary-libraries)
-- [ ] [Upload 2013-2021 prevalence number from IHME](#establish-the-year-you-want-to-include)
-- [ ] [Upload 2013-2021 population from IHME](#upload-population-data)
-- [ ] [Calculate 2013-2021 prevalence rate](#measure-the-prevalence-rate-from-2013---2019)
-- [ ] [Estimate the 2023 prevalence using regression](#generate-regression-for-2023-estimation)
+- [ ] [Upload 2013-2021 prevalence data from IHME](#upload-2013---2021-prevalence-data-from-ihme)
+- [ ] [Upload 2013-2021 population data from IHME](#upload-2013---2021-population-data-from-ihme)
+- [ ] [Calculate 2013-2021 prevalence rate](#calculate-2013---2021-prevalence-rate)
+- [ ] [Estimate 2023 prevalence using regression](#estimate-2023-prevalence-using-regression)
 - [ ] [Enter data into DISMOD-II](#estimate-prevalence-for-2023-using-dismod)
-- [ ] [Upload the output from DISMOD-II](#insert-data-from-dismod)
-- [ ] [Upload 2023 mid-year population](#insert-population-for-2023)
-- [ ] [Insert DW](#insert-your-dw)
-- [ ] [Calculate YLD](#generate-yld-dataframe)
-
+- [ ] [Upload DISMOD-II output](#upload-dismod---ii-output)
+- [ ] [Upload 2023 mid-year population](#upload-2023-mid-year---population)
+- [ ] [Insert Diasbility Weight (DW)](#insert-disability-weight)
+- [ ] [Calculate YLD](#calculate-yld)
 ### UPLOAD THE NECESSARY LIBRARIES
 ```r
 library(readxl)
@@ -54,6 +53,7 @@ YEAR     : 2013 - 2021
 > [!NOTE] 
 > We will generate the data for female first.
 
+### UPLOAD 2013-2021 PREVALENCE DATA FROM IHME
 #### ESTABLISH THE YEAR YOU WANT TO INCLUDE
 ```r
 years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
@@ -150,8 +150,8 @@ number.female <- number.female[match(custom_order, number.female$age_name), ]
 ## 7 70-79 years 21326. 22356. 23479. 24520. 24955. 25776. 27289. 29333. 30307.
 ## 8 80+ years   21783. 22787. 23930. 25516. 26973. 28418. 29806. 31102. 31488.
 ```
-
-### UPLOAD POPULATION DATA
+### UPLOAD 2013-2021 POPULATION DATA FROM IHME
+#### UPLOAD POPULATION DATA, FILTER THE GENDER & ADD NEW ROWS
 ```r
 population.female <- read.csv("/DIRECTORY REDACTED/", header = TRUE)%>% 
   filter(sex_name == "Female", year %in% years) %>%
@@ -204,7 +204,8 @@ custom_order <- c("<5 years", "5-14 years", "15-29 years", "30-44 years", "45-59
 population.female <- population.female[match(custom_order, population.female$age_name), ]
 ```
 
-### MEASURE THE PREVALENCE RATE FROM 2013 - 2019
+### CALCULATE 2013-2021 PREVALENCE RATE
+#### GENERATE A DATAFRAME
 ```r
 rate.female <- data.frame(age_name = custom_order, "2013" = NA, "2014" = NA, "2015" = NA,
                           "2016" = NA, "2017" = NA, "2018" = NA, "2019" = NA, "2020" = NA, "2021" = NA)
@@ -222,8 +223,8 @@ rate.female <- data.frame(age_name = custom_order, "2013" = NA, "2014" = NA, "20
 ## 7 70-79 years    NA    NA    NA    NA    NA    NA    NA    NA    NA
 ## 8   80+ years    NA    NA    NA    NA    NA    NA    NA    NA    NA
 ```
+#### Establish the correct column name for rate.female
 ```r
-## Establish the correct column name for rate.female
 colnames(rate.female) <- c("age_name", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 ```
 ```r
@@ -270,7 +271,8 @@ for (age_group in age_groups){
 ## 7 70-79 years  6061.590508  6056.639709  6005.719329  5876.874161  5819.750284  5782.305049    5770.588460  5796.074214  5605.579556
 ## 8   80+ years 17353.994304 17334.634083 17371.763505 17274.299496 17277.983849 17313.979393    17387.286447 17447.947080 17276.171843
 ```
-### GENERATE REGRESSION FOR 2023 ESTIMATION
+### ESTIMATE 2023 PREVALENCE USING REGRESSION
+#### Generate a new longer table
 ```r
 x <- pivot_longer(rate.female, cols = 2:10)
 ```
@@ -387,7 +389,7 @@ In DISMOD, the population data can be found in the `POPULATION 2023.xlsx` file, 
 > SELECT PREVALENCE/INCIDENCE RATE: EVERY 100,000
 
 
-### INSERT DATA FROM DISMOD
+### UPLOAD DISMOD-II
 #### SELECT OUTPUT IN NUMBER
 ```r
 dataa <- read.csv(file = "\DIRECTORY REDACTED\", 
@@ -409,7 +411,7 @@ dataa <- read.csv(file = "\DIRECTORY REDACTED\",
 ## 8 70-79      32352    0.0000         59       4319        29834           0            66  14.8969          66       1.0624      76.6734 NA
 ## 9   80+      31110    0.0000         54        679        29580           0            50  12.4519          50       1.0233      83.1062 NA
 ```
-### INSERT POPULATION FOR 2023
+### UPLOAD 2023 MID-YEAR POPULATION
 ```r
 population_2023 <- read.xlsx("C:/Users/DELL/Downloads/POPULATION 2023 8.xlsx")
 ```
@@ -425,7 +427,7 @@ population_2023 <- read.xlsx("C:/Users/DELL/Downloads/POPULATION 2023 8.xlsx")
 ## 7    70-79  538600  587300
 ## 8      80+  165000  179600
 ```
-### GENERATE A DATAFRAME FOR PREVALENCE
+#### GENERATE A DATAFRAME FOR PREVALENCE
 ```r
 age_levels <- dataa$Age[-1]
 prevalence.df <- data.frame(age = age_levels, prevalence = dataa$Prevalence.1[-1])
@@ -443,7 +445,7 @@ prevalence.df <- data.frame(age = age_levels, prevalence = dataa$Prevalence.1[-1
 ## 8   80+      29580
 ```
 
-### INSERT YOUR DW
+### INSERT DISABILITY WEIGHT
 ```r
 DW <- data.frame("age_name" = c(age_levels) , dw = c((rep(0.137, 6)), 0.161, 0.194))
 ```
@@ -460,7 +462,8 @@ DW <- data.frame("age_name" = c(age_levels) , dw = c((rep(0.137, 6)), 0.161, 0.1
 ## 8      80+ 0.194
 ```
 
-### GENERATE YLD DATAFRAME
+### CALCULATE YLD
+#### GENERATE YLD DATAFRAME
 ```r
 YLD <- data.frame("age_name" = age_levels, population = c(population_2023$FEMALE), prevalence = prevalence.df[-1], dw = c((rep(0.137, 6)), 0.161, 0.194), YLD = NA)
 ```

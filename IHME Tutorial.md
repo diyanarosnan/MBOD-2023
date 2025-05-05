@@ -10,7 +10,7 @@
 - [ ] Insert DW
 - [ ] Calculate YLD
 
-#### UPLOAD THE NECESSARY LIBRARIES
+### UPLOAD THE NECESSARY LIBRARIES
 ```r
 library(readxl)
 library(dplyr)
@@ -41,7 +41,7 @@ SEX      : FEMALE &  MALE
 YEAR     : 2013 - 2021
 ```
 
-### INSERT POPULATION FROM IHME
+#### INSERT POPULATION FROM IHME
 ```
 LOCATION : MALAYSIA
 AGE      : < 5 YEARS, 5-9 YEARS, 10-14 YEARS, 15-19 YEARS, 20-24 YEARS, 25-29 YEARS, 30-34 YEARS,
@@ -54,13 +54,13 @@ YEAR     : 2013 - 2021
 > [!NOTE] 
 > We will generate the data for female first.
 
-### ESTABLISH THE YEAR YOU WANT TO INCLUDE
+#### ESTABLISH THE YEAR YOU WANT TO INCLUDE
 ```r
 years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 ```
 > [!WARNING]
 > Remove the years you dont want to include.
-### INSERT THE NUMBER FROM IHME
+#### INSERT THE NUMBER FROM IHME
 ```r
 ## Change the directory to your own directory
 number.female <- read.csv("/path/to/file.xlsx", header = TRUE) %>%
@@ -81,7 +81,7 @@ number.female <- read.csv("/path/to/file.xlsx", header = TRUE) %>%
 ## 4 50-54 years  2548.  2591.  2626.  2655.  2681.  2704.  2721.  2705.  2716.
 ```
 
-### ADD UP THE YEARS TO FORM 8 GROUPS
+#### ADD UP THE YEARS TO FORM 8 GROUPS
 ```r
 for (year in years){
   count1 <- number.female[number.female$age_name == "5-9 years", year]
@@ -130,7 +130,7 @@ for (year in years){
 ## 5 <5 years         0      0      0      0      0      0      0      0      0 
 ```
 
-### MATCH AND CUSTOM ORDER OF THE YEAR
+#### MATCH AND CUSTOM ORDER OF THE YEAR
 ```r
 custom_order <- c("<5 years", "5-14 years", "15-29 years", "30-44 years", "45-59 years", "60-69 years",  
                   "70-79 years", "80+ years")
@@ -160,7 +160,7 @@ population.female <- read.csv("/DIRECTORY REDACTED/", header = TRUE)%>%
   add_row(age_name = c("5-14 years", "15-29 years", "30-44 years", "45-59 years", "60-69 years", "70-79 years"))
 ```
 
-### ADD UP THE YEARS TO FORM 8 GROUPS
+#### ADD UP THE YEARS TO FORM 8 GROUPS
 ```r
 for (year in years){
   count1 <- population.female[population.female$age_name == "5-9 years", year]
@@ -197,7 +197,7 @@ for (year in years){
   population.female[population.female$age_name == "70-79 years", year] <- result
 }
 ```
-### CUSTOM ORDER THE YEAR
+#### CUSTOM ORDER THE YEAR
 ```r
 custom_order <- c("<5 years", "5-14 years", "15-29 years", "30-44 years", "45-59 years", "60-69 years",  
                   "70-79 years", "80+ years")
@@ -238,7 +238,7 @@ colnames(rate.female) <- c("age_name", "2013", "2014", "2015", "2016", "2017", "
 ## 7 70-79 years   NA   NA   NA   NA   NA   NA   NA   NA   NA
 ## 8   80+ years   NA   NA   NA   NA   NA   NA   NA   NA   NA
 ```
-### ESTABLISH THE AGE GROUPS
+#### ESTABLISH THE AGE GROUPS
 ```r
 age_groups <- c(number.female$age_name)
 ```
@@ -247,7 +247,7 @@ age_groups <- c(number.female$age_name)
 [1] "<5 years"    "5-14 years"  "15-29 years" "30-44 years" "45-59 years" "60-69 years" "70-79 years"
 [8] "80+ years" 
 ```
-### CALCULATE THE PREVALENCE RATE FOR FEMALE
+#### CALCULATE THE PREVALENCE RATE FOR FEMALE
 ```r
 for (age_group in age_groups){
   for(year in years){
@@ -379,10 +379,13 @@ write.csv(female.alzheimer.regression, "8 groups female alzheimer 2013-2021 regr
 > CODE FOR MALE IS SLIGHTLY DIFFERENT SO PLEASE REFER YOUR R SCRIPT
 
 ### ESTIMATE PREVALENCE FOR 2023 USING DISMOD
-```
-IN DISMOD
-SELECT PREVALENCE/INCIDENCE RATE: EVERY 100,000
-```
+
+In DISMOD, the population data can be found in the `POPULATION 2023.xlsx` file, while total mortality and cause-specific mortality figures are located in the `DISMOD Mortality.xlsx` file.
+
+> [!IMPORTANT]
+> SELECT TOTAL MORTALITY & MORTALITY RATE: EVERY 1,000
+> SELECT PREVALENCE/INCIDENCE RATE: EVERY 100,000
+
 
 ### INSERT DATA FROM DISMOD
 #### SELECT OUTPUT IN NUMBER

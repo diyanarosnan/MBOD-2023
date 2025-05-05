@@ -9,7 +9,8 @@
 - [ ] [Upload 2023 mid-year population](#upload-2023-mid-year---population)
 - [ ] [Insert Diasbility Weight (DW)](#insert-disability-weight)
 - [ ] [Calculate YLD](#calculate-yld)
-### UPLOAD THE NECESSARY LIBRARIES
+
+## UPLOAD THE NECESSARY LIBRARIES
 ```r
 library(readxl)
 library(dplyr)
@@ -53,7 +54,7 @@ YEAR     : 2013 - 2021
 > [!NOTE] 
 > We will generate the data for female first.
 
-### UPLOAD 2013-2021 PREVALENCE DATA FROM IHME
+## UPLOAD 2013-2021 PREVALENCE DATA FROM IHME
 #### ESTABLISH THE YEAR YOU WANT TO INCLUDE
 ```r
 years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
@@ -150,7 +151,7 @@ number.female <- number.female[match(custom_order, number.female$age_name), ]
 ## 7 70-79 years 21326. 22356. 23479. 24520. 24955. 25776. 27289. 29333. 30307.
 ## 8 80+ years   21783. 22787. 23930. 25516. 26973. 28418. 29806. 31102. 31488.
 ```
-### UPLOAD 2013-2021 POPULATION DATA FROM IHME
+## UPLOAD 2013-2021 POPULATION DATA FROM IHME
 #### UPLOAD POPULATION DATA, FILTER THE GENDER & ADD NEW ROWS
 ```r
 population.female <- read.csv("/DIRECTORY REDACTED/", header = TRUE)%>% 
@@ -204,7 +205,7 @@ custom_order <- c("<5 years", "5-14 years", "15-29 years", "30-44 years", "45-59
 population.female <- population.female[match(custom_order, population.female$age_name), ]
 ```
 
-### CALCULATE 2013-2021 PREVALENCE RATE
+## CALCULATE 2013-2021 PREVALENCE RATE
 #### GENERATE A DATAFRAME
 ```r
 rate.female <- data.frame(age_name = custom_order, "2013" = NA, "2014" = NA, "2015" = NA,
@@ -271,7 +272,7 @@ for (age_group in age_groups){
 ## 7 70-79 years  6061.590508  6056.639709  6005.719329  5876.874161  5819.750284  5782.305049    5770.588460  5796.074214  5605.579556
 ## 8   80+ years 17353.994304 17334.634083 17371.763505 17274.299496 17277.983849 17313.979393    17387.286447 17447.947080 17276.171843
 ```
-### ESTIMATE 2023 PREVALENCE USING REGRESSION
+## ESTIMATE 2023 PREVALENCE USING REGRESSION
 #### Generate a new longer table
 ```r
 x <- pivot_longer(rate.female, cols = 2:10)
@@ -380,7 +381,7 @@ write.csv(female.alzheimer.regression, "8 groups female alzheimer 2013-2021 regr
 > 
 > CODE FOR MALE IS SLIGHTLY DIFFERENT SO PLEASE REFER YOUR R SCRIPT
 
-### ESTIMATE PREVALENCE FOR 2023 USING DISMOD
+## ESTIMATE PREVALENCE FOR 2023 USING DISMOD
 
 In DISMOD, the population data can be found in the `POPULATION 2023.xlsx` file, while total mortality and cause-specific mortality figures are located in the `DISMOD Mortality.xlsx` file.
 
@@ -389,7 +390,7 @@ In DISMOD, the population data can be found in the `POPULATION 2023.xlsx` file, 
 > SELECT PREVALENCE/INCIDENCE RATE: EVERY 100,000
 
 
-### UPLOAD DISMOD-II
+## UPLOAD DISMOD-II
 #### SELECT OUTPUT IN NUMBER
 ```r
 dataa <- read.csv(file = "\DIRECTORY REDACTED\", 
@@ -411,7 +412,7 @@ dataa <- read.csv(file = "\DIRECTORY REDACTED\",
 ## 8 70-79      32352    0.0000         59       4319        29834           0            66  14.8969          66       1.0624      76.6734 NA
 ## 9   80+      31110    0.0000         54        679        29580           0            50  12.4519          50       1.0233      83.1062 NA
 ```
-### UPLOAD 2023 MID-YEAR POPULATION
+## UPLOAD 2023 MID-YEAR POPULATION
 ```r
 population_2023 <- read.xlsx("C:/Users/DELL/Downloads/POPULATION 2023 8.xlsx")
 ```
@@ -445,7 +446,7 @@ prevalence.df <- data.frame(age = age_levels, prevalence = dataa$Prevalence.1[-1
 ## 8   80+      29580
 ```
 
-### INSERT DISABILITY WEIGHT
+## INSERT DISABILITY WEIGHT
 ```r
 DW <- data.frame("age_name" = c(age_levels) , dw = c((rep(0.137, 6)), 0.161, 0.194))
 ```
@@ -462,7 +463,7 @@ DW <- data.frame("age_name" = c(age_levels) , dw = c((rep(0.137, 6)), 0.161, 0.1
 ## 8      80+ 0.194
 ```
 
-### CALCULATE YLD
+## CALCULATE YLD
 #### GENERATE YLD DATAFRAME
 ```r
 YLD <- data.frame("age_name" = age_levels, population = c(population_2023$FEMALE), prevalence = prevalence.df[-1], dw = c((rep(0.137, 6)), 0.161, 0.194), YLD = NA)

@@ -15,6 +15,9 @@ library(tidyr)
 ```r
 HFMD <- read.xlsx("directory/to/file/file_name.xlsx", sheet =  "HFMD")
 ```
+>[!WARNING]
+> Change the file name accordingly.
+
 ### DATA CLEANING
 #### FILTER OUT THE DATA WHERE THE AGE IS NA OR DEATH DATA 
 ```r

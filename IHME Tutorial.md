@@ -5,7 +5,7 @@
 - [ ] [Calculate 2013-2021 prevalence rate](#calculate-2013---2021-prevalence-rate)
 - [ ] [Estimate 2023 prevalence using regression](#estimate-2023-prevalence-using-regression)
 - [ ] [Enter data into DISMOD-II](#estimate-prevalence-for-2023-using-dismod)
-- [ ] [Upload DISMOD-II output](#upload-dismod---ii-output)
+- [ ] [Upload DISMOD-II output](#upload-data-from-dismod---ii)
 - [ ] [Upload 2023 mid-year population](#upload-2023-mid-year---population)
 - [ ] [Insert Diasbility Weight (DW)](#insert-disability-weight)
 - [ ] [Calculate YLD](#calculate-yld)

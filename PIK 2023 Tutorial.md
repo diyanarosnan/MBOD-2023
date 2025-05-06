@@ -14,15 +14,6 @@ library(dplyr)
 library(tidyr)
 ```
 
-### LOAD THE R DATA FILE FROM PIK
-```r
-load("/directory/path/to/file.xlsx")
-```
->[!NOTE]
->There is more than one way to load your file!
->
-> If your file is in CSV format, remember to change file extension from `.xlsx` to `.csv`
-
 ### CALCULATE AGE FOR ROWS WITH -1 VALUES IN THE `patient_age_single` COLUMN
 Identify the rownames in the `Inp2023_burden` where `patient_age_single` is equal to -1.
 ```r

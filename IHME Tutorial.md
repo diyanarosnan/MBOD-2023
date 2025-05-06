@@ -10,6 +10,9 @@
 - [ ] [Insert Diasbility Weight (DW)](#insert-disability-weight)
 - [ ] [Calculate YLD](#calculate-yld)
 
+## CREATE NEW R-PROJECT
+
+
 ## UPLOAD THE NECESSARY LIBRARIES
 ```r
 library(readxl)
@@ -61,6 +64,7 @@ years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021
 ```
 > [!WARNING]
 > Remove the years you dont want to include.
+
 #### INSERT THE NUMBER FROM IHME
 ```r
 ## Change the directory to your own directory
@@ -154,7 +158,7 @@ number.female <- number.female[match(custom_order, number.female$age_name), ]
 ## UPLOAD 2013-2021 POPULATION DATA FROM IHME
 #### UPLOAD POPULATION DATA, FILTER THE GENDER & ADD NEW ROWS
 ```r
-population.female <- read.csv("/DIRECTORY REDACTED/", header = TRUE)%>% 
+population.female <- read.csv("/path/to/file.csv", header = TRUE)%>% 
   filter(sex_name == "Female", year %in% years) %>%
   select(age_name, year, val) %>%
   pivot_wider(names_from = year, values_from = val)  %>% 
@@ -293,9 +297,10 @@ x <- pivot_longer(rate.female, cols = 2:10)
 ##  9 <5 years   2021      0
 ## 10 5-14 years 2013      0
 ```
+
+#### Generate tweo new dataframe for regression
 ```r
 new_data <- data.frame(year = 2023)
-
 female.new.df <- data.frame(age_name = age_groups)
 ```
 ```r
@@ -312,8 +317,6 @@ female.new.df <- data.frame(age_name = age_groups)
 ```
 
 ```r
-years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
-
 for (a in age_groups){
   for (i in years){
     temp <- x %>% filter(age_name == a) %>% select(name, value) %>% filter(name %in% years)
@@ -346,11 +349,11 @@ colnames(female.new.df) <- c("age", "constant", "coefficient", "2023")
 ## 1    <5 years      0.0000   0.00000000     0.000000
 ## 2  5-14 years      0.0000   0.00000000     0.000000
 ## 3 15-29 years      0.0000   0.00000000     0.000000
-## 4 30-44 years    140.9702  -0.06698766     5.454138
-## 5 45-59 years  -2999.7850   1.68506611   409.103729
-## 6 60-69 years  -1038.9924   1.46294557  1920.546514
-## 7 70-79 years 121660.9000 -57.41587532  5508.584230
-## 8   80+ years  19865.8708  -1.25759314 17321.759859
+## 4 30-44 years    116.8782  -0.05503355     5.545307
+## 5 45-59 years   -451.0501   0.42030668   399.230272
+## 6 60-69 years  15599.2419  -6.79298089  1857.041600
+## 7 70-79 years 112447.9356 -52.84285236  5546.845249
+## 8   80+ years  13996.9085   1.65624876 17347.499715
 ```
 
 ```r
@@ -382,18 +385,20 @@ write.csv(female.alzheimer.regression, "8 groups female alzheimer 2013-2021 regr
 > CODE FOR MALE IS SLIGHTLY DIFFERENT SO PLEASE REFER YOUR R SCRIPT
 
 ## ESTIMATE PREVALENCE FOR 2023 USING DISMOD
-
 In DISMOD, the population data can be found in the `POPULATION 2023.xlsx` file, while total mortality and cause-specific mortality figures are located in the `DISMOD Mortality.xlsx` file.
 
 > [!IMPORTANT]
 > SELECT TOTAL MORTALITY & MORTALITY RATE: EVERY 1,000
+> 
 > SELECT PREVALENCE/INCIDENCE RATE: EVERY 100,000
-
+>
+> SELECT 8 AGE GROUPS & SELECT OUTPUT IN NUMBER
+>
+> SAVE IN THE SAME FILE AS YOUR R PROJECT
 
 ## UPLOAD DISMOD-II
-#### SELECT OUTPUT IN NUMBER
 ```r
-dataa <- read.csv(file = "\DIRECTORY REDACTED\", 
+dataa <- read.csv(file = "/path/to/file.csv", 
                   skip = 50, nrows = 9,
                   header = TRUE)
 ```
@@ -414,7 +419,7 @@ dataa <- read.csv(file = "\DIRECTORY REDACTED\",
 ```
 ## UPLOAD 2023 MID-YEAR POPULATION
 ```r
-population_2023 <- read.xlsx("C:/Users/DELL/Downloads/POPULATION 2023 8.xlsx")
+population_2023 <- read.xlsx("path/to/file.xlsx")
 ```
 ```r
 > population_2023
@@ -503,3 +508,7 @@ for(umur in age_levels){
 ```r
 write.csv(YLD, "YLD_8_female.CSV")
 ```
+
+>[!WARNING]
+> Please make sure your path to file is changed accordingly.
+>

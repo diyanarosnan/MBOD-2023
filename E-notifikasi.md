@@ -1,27 +1,34 @@
 ## E-NOTIFIKASI SUMMARY
-- [ ] Upload library
-- [ ] Upload each dataset for respective diseases
-- [ ] Data cleaning
-- [ ] Generate summary table
-- [ ] Calculate YLD
+- [ ] [Load library](#Load-library)
+- [ ] [Upload each dataset for respective diseases](#upload-data)
+- [ ] [Data cleaning](#data-cleaning)
+- [ ] [Generate summary table](#generate-a-summary-table)
 
-Filter out data with no age, and MATI 
-
-#### UPLOAD DATA
+### LOAD LIBRARY
+```r
+library(openxlsx)
+library(dplyr)
+library(tidyr)
+```
+### UPLOAD DATA
 
 ```r
 HFMD <- read.xlsx("directory/to/file/file_name.xlsx", sheet =  "HFMD")
 ```
+### DATA CLEANING
 #### FILTER OUT THE DATA WHERE THE AGE IS NA OR DEATH DATA 
 ```r
-HFMD.mia <- HFMD %>% filter(is.na(`Umur.(Tahun)`) & is.na(`Umur.(Bulan)`) & is.na(`Umur.(Hari)`)| Status.Pesakit == "Mati")
+HFMD.mia <- HFMD %>% filter(
+  is.na(`Umur.(Tahun)`) & is.na(`Umur.(Bulan)`) & is.na(`Umur.(Hari)`)|
+  Status.Pesakit == "Mati" |
+  !Diagnosis == "HFMD")
 ```
 Returns rows in `HFMD` that do not have matching rows in `HFMD.mia`
 ```r
 HFMD <- (anti_join(HFMD, HFMD.mia))
 ```
 
-#### GENERATE A SUMMARY TABLE
+### GENERATE A SUMMARY TABLE
 
 `mutate()` will generate a new column called `age_group`. We will assign each age into a specific age group as shown below.
 
@@ -116,7 +123,7 @@ custom_order <- c("0-4", "5-14", "15-29", "30-44", "45-59", "60-69",
 summary_HFMD <- summary_HFMD[match(custom_order, summary_HFMD$age_group), ]
 ```
 ```
-> summary_HFMD[match(custom_order, summary_HFMD$age_group), ]
+> summary_HFMD
 ##  A tibble: 8 × 3
 ##  age_group Lelaki Perempuan
 ##  <chr>      <int>     <int>

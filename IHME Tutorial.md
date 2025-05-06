@@ -303,7 +303,7 @@ x <- pivot_longer(rate.female, cols = 2:10)
 ## 10 5-14 years 2013      0
 ```
 
-#### Generate tweo new dataframe for regression
+#### Generate two new dataframe for regression
 ```r
 new_data <- data.frame(year = 2023)
 female.new.df <- data.frame(age_name = age_groups)
@@ -345,6 +345,7 @@ for (a in age_groups){
 ## 7 70-79 years 121660.9000 -57.41587532  5508.584230
 ## 8   80+ years  19865.8708  -1.25759314 17321.759859
 ```
+CHANGE COLUMN NAME
 ```r
 colnames(female.new.df) <- c("age", "constant", "coefficient", "2023")
 ```
@@ -401,10 +402,10 @@ In DISMOD, the population data can be found in the `POPULATION 2023.xlsx` file, 
 >
 > SAVE IN THE SAME FILE AS YOUR R PROJECT
 
-## UPLOAD DISMOD-II
+## UPLOAD DATA FROM DISMOD-II
 ```r
 dataa <- read.csv(file = "/path/to/file.csv", 
-                  skip = 50, nrows = 9,
+                  skip = 20, nrows = 9,
                   header = TRUE)
 ```
 >[!WARNING]

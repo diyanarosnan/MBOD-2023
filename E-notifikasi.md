@@ -1,5 +1,5 @@
 ## E-NOTIFIKASI SUMMARY
-- [ ] [Load library](#Load-library)
+- [ ] [Load library](#load-library)
 - [ ] [Upload each dataset for respective diseases](#upload-data)
 - [ ] [Data cleaning](#data-cleaning)
 - [ ] [Generate summary table](#generate-a-summary-table)

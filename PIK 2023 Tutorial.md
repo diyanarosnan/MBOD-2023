@@ -48,7 +48,7 @@ Extract the year from column `dob_clean` and place it in a new column (`year`).
 df$year <- as.numeric(format(df$dob_clean, "%Y"))
 ```
 
-Calculate the age and upate the values in the `patient_age_single` column.
+Calculate the age and update the values in the `patient_age_single` column.
 ```r
 df$patient_age_single <- 2023 - df$year
 ```
@@ -89,6 +89,12 @@ FILTER FOR: RHEUMATIC HEART DISEASE: I01-I09
 disease_data <- Inp2023_burden_clean %>% 
   filter(icd10_3d_code %in% c("I01", "I02", "I03", "I04", "I05", "I06", "I07", "I08", "I09"))
 ```
+>[!IMPORTANT]
+> Make sure to put **double quotation mark("")** and **comma (,)** between your code.
+
+>[!CAUTION]
+> Entering values like **"I01-I09"** will not work in R .
+> You have to write down one by one, **"I01"** , **"I02"** , **"I03"**
 
 #### FILTER OUT MISSING DATA (FOR YOUR REFERENCE)
 ```r
@@ -103,14 +109,6 @@ disease_data <- disease_data %>%
   filter(patient_age_single >= 0, !disch_type_desc == "MATI")
 
 ```
-
-
->[!IMPORTANT]
-> Make sure to put **double quotation mark("")** and **comma (,)** between your code.
-
->[!CAUTION]
-> Entering values like **"I01-I09"** will not work in R .
-> You have to write down one by one, **"I01"** , **"I02"** , **"I03"**
 
 #### GENERATE A SUMMARY TABLE
 ```r

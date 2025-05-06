@@ -19,7 +19,7 @@ HFMD <- read.xlsx("directory/to/file/file_name.xlsx", sheet =  "HFMD")
 > Change the file name accordingly.
 
 ### DATA CLEANING
-#### FILTER OUT THE DATA WHERE THE AGE IS NA OR DEATH DATA 
+#### FILTER OUT THE DATA WHERE THE AGE IS NA OR THOSE WHO DIED
 ```r
 HFMD.mia <- HFMD %>% filter(
   is.na(`Umur.(Tahun)`) & is.na(`Umur.(Bulan)`) & is.na(`Umur.(Hari)`)|
@@ -30,6 +30,12 @@ Returns rows in `HFMD` that do not have matching rows in `HFMD.mia`
 ```r
 HFMD <- (anti_join(HFMD, HFMD.mia))
 ```
+
+Remove duplicates from HFMD
+```r
+HFMD <- HFMD %>% distinct(Notifikasi.no, .keep_all = TRUE)
+```
+
 
 ### GENERATE A SUMMARY TABLE
 

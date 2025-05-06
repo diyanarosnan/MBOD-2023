@@ -68,13 +68,18 @@ years <- c("2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021
 #### INSERT THE NUMBER FROM IHME
 ```r
 ## Change the directory to your own directory
-number.female <- read.csv("/path/to/file.xlsx", header = TRUE) %>%
+number.female <- read.csv("/path/to/file.csv", header = TRUE) %>%
   filter(sex_name == "Female", year %in% years) %>% 
   select(age_name, year, val) %>%
   pivot_wider(names_from = year, values_from = val) %>%
   add_row(age_name = c("5-14 years", "15-29 years", "30-44 years",
                        "45-59 years", "60-69 years", "70-79 years"))
 ```
+>[!NOTE]
+>There is more than one way to load your file!
+>
+> If your file is in excel format, remember to change file extension from `.csv` to `.xlsx`
+
 ```r
 > number.female
 ## A tibble: 28 × 10

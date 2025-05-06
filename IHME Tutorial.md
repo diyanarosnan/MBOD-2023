@@ -1,12 +1,12 @@
 ## IHME SUMMARY
 - [ ] [Upload library](#upload-the-necessary-libraries)
-- [ ] [Upload 2013-2021 prevalence data from IHME](#upload-2013---2021-prevalence-data-from-ihme)
-- [ ] [Upload 2013-2021 population data from IHME](#upload-2013---2021-population-data-from-ihme)
-- [ ] [Calculate 2013-2021 prevalence rate](#calculate-2013---2021-prevalence-rate)
+- [ ] [Upload 2013-2021 prevalence data from IHME](#upload-2013-2021-prevalence-data-from-ihme)
+- [ ] [Upload 2013-2021 population data from IHME](#upload-2013-2021-population-data-from-ihme)
+- [ ] [Calculate 2013-2021 prevalence rate](#calculate-2013-2021-prevalence-rate)
 - [ ] [Estimate 2023 prevalence using regression](#estimate-2023-prevalence-using-regression)
 - [ ] [Enter data into DISMOD-II](#estimate-prevalence-for-2023-using-dismod)
-- [ ] [Upload DISMOD-II output](#upload-data-from-dismod---ii)
-- [ ] [Upload 2023 mid-year population](#upload-2023-mid-year---population)
+- [ ] [Upload DISMOD-II output](#upload-data-from-dismod)
+- [ ] [Upload 2023 mid-year population](#upload-2023-mid-year-population)
 - [ ] [Insert Diasbility Weight (DW)](#insert-disability-weight)
 - [ ] [Calculate YLD](#calculate-yld)
 
@@ -402,7 +402,7 @@ In DISMOD, the population data can be found in the `POPULATION 2023.xlsx` file, 
 >
 > SAVE IN THE SAME FILE AS YOUR R PROJECT
 
-## UPLOAD DATA FROM DISMOD-II
+## UPLOAD DATA FROM DISMOD
 ```r
 dataa <- read.csv(file = "/path/to/file.csv", 
                   skip = 20, nrows = 9,

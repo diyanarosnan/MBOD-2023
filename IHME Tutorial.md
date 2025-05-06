@@ -7,7 +7,7 @@
 - [ ] [Enter data into DISMOD-II](#estimate-prevalence-for-2023-using-dismod)
 - [ ] [Upload DISMOD-II output](#upload-data-from-dismod)
 - [ ] [Upload 2023 mid-year population](#upload-2023-mid-year-population)
-- [ ] [Insert Diasbility Weight (DW)](#insert-disability-weight)
+- [ ] [Insert Disability Weight (DW)](#insert-disability-weight)
 - [ ] [Calculate YLD](#calculate-yld)
 
 ## CREATE NEW R-PROJECT

@@ -106,7 +106,7 @@ missing_summary <- disease_data %>%
 ```r
 disease_data <- disease_data %>%
   filter(patient_gender %in% c("PEREMPUAN", "LELAKI")) %>%
-  filter(patient_age_single >= 0, !disch_type_desc == "MATI")
+  filter(patient_age_single >= 0, !disch_type_desc == "Mati")
 
 ```
 
